@@ -1,0 +1,70 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* current1 = l1;
+        ListNode* current2 = l2;
+        std::string str1, str2;
+        while(current1){
+            str1 = std::to_string(current1->val)+str1;
+            current1 = current1->next;
+        }
+        while(current2){
+            str2 = std::to_string(current2->val)+str2;
+            current2 = current2->next;
+        }
+                
+        
+        std::string minS, maxS;
+        if(str1.length() >= str2.length()){
+            maxS = str1;
+            minS = str2;
+        }else{
+            maxS = str2;
+            minS = str1;
+        }
+        
+        int minLength = minS.length();
+        int maxLength = maxS.length();
+        int remainder = 0;
+        std::string twoSumStr ="";
+        for(int i=minLength-1; i >=0; i--){
+            int minNum = minS[i]-'0';
+            int maxNum = maxS[i+(maxLength-minLength)]-'0';
+            int twoSum = minNum+maxNum+remainder;
+            remainder = twoSum/10;
+            twoSumStr += std::to_string(twoSum%10); 
+        }
+        
+        for(int i=maxLength-minLength-1; i >=0; i--){
+            int maxNum = maxS[i]-'0';
+            int twoSum = maxNum+remainder;
+            remainder = twoSum/10;
+            twoSumStr += std::to_string(twoSum%10); 
+        }
+        if(remainder>0){
+            twoSumStr += std::to_string(remainder);
+        }
+        //std::cout << twoSumStr << endl;
+        ListNode* head = nullptr;;
+        ListNode* current;
+        for(int i=0;i< twoSumStr.length(); i++){
+            ListNode* node = new ListNode((twoSumStr[i]-'0'));
+            if(!head){
+                head = node;
+                current = head;
+            }else{
+                current->next = node;
+                current = current->next;
+            }
+        }
+        return head;
+    }
+};
