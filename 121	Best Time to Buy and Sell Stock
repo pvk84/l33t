@@ -1,0 +1,54 @@
+class Solution {
+public:
+    struct minMax{
+        int min;
+        int minPosition;
+        int max;
+        int maxPosition;
+    };
+    minMax getMinMax(std::vector<int>& prices, int i, int j){
+        auto maxIT = std::max_element(prices.begin()+i, prices.begin()+j); // c++11
+        auto minIT = std::min_element(prices.begin()+i, maxIT); // c++11
+        
+        minMax mm = {};
+        mm.min = *minIT;
+        mm.max = *maxIT;
+        mm.maxPosition = maxIT-prices.begin();
+        mm.minPosition = minIT-prices.begin();
+        //std::cout << mm.min << "," << mm.minPosition << "," << mm.max << "," << mm.maxPosition << endl;
+        return mm;
+        
+    }
+    int maxProfit(vector<int>& prices) {
+        /*int maxDiff = 0;
+        std::vector<minMax> minMaxes;    
+        
+        int begin = 0;
+        int end = prices.size();
+        
+        while(begin < end){
+            minMax mm = getMinMax(prices, begin, end);
+            minMaxes.push_back(mm);
+            begin = mm.maxPosition+1;
+            
+            int diff = mm.max-mm.min;
+            if(diff > maxDiff){
+                maxDiff = diff;
+            }
+        }
+        
+        return maxDiff;*/
+    if(prices.size() == 0){
+        return 0;
+    }
+    int profit = 0;    
+    int cheapest = prices[0];
+
+    for(int i=1; i < prices.size(); i++){
+        cheapest = min(cheapest, prices[i]);
+        profit = max(profit, prices[i] - cheapest);
+    }
+
+    return profit;
+    }
+};
