@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    std::unordered_map<TreeNode*, int> nodeHeightMap;
+public:
+    int heightOfNode(TreeNode*& node){
+        int height = 0;
+        if(!node){
+            return 0;
+        }
+        height = std::max(1+heightOfNode(node->left), 1+heightOfNode(node->right));
+        nodeHeightMap[node] = height;
+        return height;
+    }
+    
+    bool isBalanced(TreeNode*& root) {
+        if(!root){
+            return true;
+        }
+        int leftHeight = nodeHeightMap.count(root->left)? nodeHeightMap.at(root->left) : heightOfNode(root->left);
+        int rightHeight = nodeHeightMap.count(root->right)? nodeHeightMap.at(root->right) :  heightOfNode(root->right);
+        if(std::abs(leftHeight - rightHeight) <= 1){
+            return isBalanced(root->left) && isBalanced(root->right);
+        }else{
+            return false;
+        }
+    }
+};
