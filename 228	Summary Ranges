@@ -1,0 +1,40 @@
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+        int prev = INT_MIN;
+        int beginPrev = 0;
+        std::vector<string> strs;
+        for(int i= 0; i< nums.size(); i++){
+            int num = nums[i];
+            std::string str;
+            if(i>0){
+                if(num - prev == 1){
+                    if(i==nums.size()-1){
+                        if(i-beginPrev > 0){
+                            str = std::to_string(nums[beginPrev])+"->"+std::to_string(nums[i]);
+                            strs.push_back(str);
+                        }
+                    }
+                }else{
+                    if(i-beginPrev == 1){
+                        str = std::to_string(prev);
+                    }else if(i-beginPrev > 1){
+                        str = std::to_string(nums[beginPrev])+"->"+std::to_string(nums[i-1]);
+                    }
+                    strs.push_back(str);
+                    if(i==nums.size()-1){
+                        str = std::to_string(num);
+                        strs.push_back(str);
+                    }
+                    beginPrev = i;
+                }
+            }
+            prev = num;
+            if(nums.size() == 1){
+                str = std::to_string(num);
+                strs.push_back(str);
+            }
+        }
+        return strs;
+    }
+};
