@@ -1,0 +1,35 @@
+class Stack {
+public:
+    std::queue<int> oneQ;
+    int lastInsertElement;
+    // Push element x onto stack.
+    void push(int x) {
+        lastInsertElement = x;
+        oneQ.push(x);
+    }
+
+    // Removes the element on top of the stack.
+    void pop() {
+        int lastEl = lastInsertElement;
+        int mostRecentEl = lastInsertElement;
+        while(oneQ.front() != lastEl){
+            mostRecentEl = oneQ.front();
+            oneQ.push(oneQ.front());
+            oneQ.pop();
+        }
+        if(oneQ.front() == lastEl){
+            oneQ.pop();
+            lastInsertElement = mostRecentEl;
+        }
+    }
+
+    // Get the top element.
+    int top() {
+        return lastInsertElement;
+    }
+
+    // Return whether the stack is empty.
+    bool empty() {
+        return oneQ.empty();   
+    }
+};
