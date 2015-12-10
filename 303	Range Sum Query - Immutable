@@ -1,0 +1,26 @@
+class NumArray {
+    std::vector<long> mNums;
+public:
+    NumArray(vector<int> &nums) {
+        long val = 0;
+        for (auto num: nums) {
+            val+=num;
+            mNums.push_back(val);
+        }
+    }
+
+    int sumRange(int i, int j) {
+        int val = 0;
+        if(i-1 >= 0){
+            val = mNums[i-1];
+        }
+        int sum = mNums[j]-val;
+        return sum;
+    }
+};
+
+
+// Your NumArray object will be instantiated and called as such:
+// NumArray numArray(nums);
+// numArray.sumRange(0, 1);
+// numArray.sumRange(1, 2);
