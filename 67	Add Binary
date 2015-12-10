@@ -1,0 +1,53 @@
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        std::string max, min;
+        if(a.length() >= b.length()){
+            max = a; min = b;
+        }else{
+            max = b; min = a;
+        }
+        int maxLength = max.length();
+        int minLength = min.length();
+        std::string sumStr = "";
+        int remainder = 0;
+        int maxBinary = 1;
+        int lengthDiff = (maxLength-minLength);
+        for(int i=minLength-1; i >=0; i--){
+            char minC = min[i];
+            char maxC = max[i+lengthDiff];
+            //std::cout << i << ", " << minC <<", " <<  maxC <<", " <<  remainder << endl;
+            int sum = (minC-'0')+(maxC-'0')+remainder;
+            if(sum == 2){
+                remainder = 1;
+                sumStr = "0"+sumStr;
+            }else if(sum == 3){
+                remainder = 1;
+                sumStr = "1"+sumStr;
+            }else{
+                remainder = 0;
+                sumStr = std::to_string(sum)+sumStr;
+            }
+        }
+        
+        for(int i=(maxLength-minLength-1); i >=0; i--){
+            char maxC = max[i];
+            int sum = (maxC-'0')+remainder;
+            if(sum == 2){
+                remainder = 1;
+                sumStr = "0"+sumStr;
+            }else if(sum == 3){
+                remainder = 1;
+                sumStr = "1"+sumStr;
+            }else{
+                remainder = 0;
+                sumStr = std::to_string(sum)+sumStr;
+            }
+        }
+        if(remainder > 0){
+            sumStr="1"+sumStr;
+        }
+       return sumStr; 
+
+    }
+};
