@@ -1,0 +1,27 @@
+class MinStack {
+public:
+    std::stack<int> minStack;
+    std::stack<int> regStack;
+    //int min = INT_MIN;
+    void push(int x) {
+        if((minStack.empty()) || (x<=getMin())){
+            minStack.push(x);
+        }
+        regStack.push(x);
+    }
+
+    void pop() {
+        if(regStack.top() == minStack.top()){
+            minStack.pop();
+        }
+        regStack.pop();
+    }
+
+    int top() {
+        return regStack.top();
+    }
+
+    int getMin() {
+        return minStack.top();
+    }
+};
