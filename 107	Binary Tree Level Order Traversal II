@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    int mHeight;
+public:
+    int heightOfNode(TreeNode*& root){
+        if(!root){
+            return 0;
+        }
+        return std::max(1+heightOfNode(root->left), 1+heightOfNode(root->right));
+    }
+    
+    void addRowsToVec(TreeNode*& node, std::vector<vector<int>>& mVec, int row){
+        if(!node){
+            return;
+        }
+        mVec[mHeight-row-1].push_back(node->val);
+        ++row;
+        addRowsToVec(node->left, mVec, row);
+        addRowsToVec(node->right, mVec, row);
+    }
+    
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        mHeight = heightOfNode(root);
+        std::vector<std::vector<int>> mVec;
+        mVec.reserve(mHeight); 
+        for(int i=0; i< mHeight; i++){
+            std::vector<int> vec;
+            mVec.push_back(vec);
+        }
+        addRowsToVec(root, mVec, 0);
+        return mVec;
+    }
+};
