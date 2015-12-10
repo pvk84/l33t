@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        std::string lcPrefix = "";
+        std::string tempStr;
+        int loop = 0;
+        int vecLength = strs.size();
+        int runloop = true;
+        while(runloop && (vecLength > 0)){
+            char c;
+            bool sameForAllLoops = true;
+            for(int i=0; i< vecLength; i++){
+                std::string str = strs[i];
+                if(str.length() <= loop){
+                    return lcPrefix;
+                }
+                if(i == 0){
+                    c = str[loop];
+                }
+                if(str[loop] != c){
+                    return lcPrefix;
+                }
+            }
+            lcPrefix += c;
+            loop++;
+        }
+        return lcPrefix;
+    }
+};
