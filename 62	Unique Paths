@@ -1,0 +1,15 @@
+class Solution {
+public:
+    std::unordered_map<std::string, int> pathMap;
+    int uniquePaths(int m, int n) {
+        if(m == 1 ||  n == 1){
+            return 1;
+        }
+        
+        std::string firstStr = std::to_string(m)+":"+std::to_string(n-1);
+        int first = pathMap[firstStr]? pathMap[firstStr]: (pathMap[firstStr] = uniquePaths(m,n-1));
+        std::string secondStr = std::to_string(m-1)+":"+std::to_string(n);
+        int second = pathMap[secondStr]? pathMap[secondStr]: (pathMap[secondStr] = uniquePaths(m-1,n));
+        return (first+second);
+    }
+};
