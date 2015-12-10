@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int getDigits(long long num){
+        int digits = 1;
+        while(num/10 != 0){
+            digits++;
+            num = num/10;
+        }
+        return digits;
+    }
+    vector<int> plusOne(vector<int>& digits) {
+        int length = digits.size();
+        for(int index = length-1; index>= 0; index-- ){
+            if(digits[index] < 9){
+                digits[index]++;
+                return digits;
+            }
+            digits[index] = 0;
+        }
+        
+        digits.resize(length+1);
+        
+        std::fill(digits.begin(), digits.end(), 0);
+        digits[0] = 1;
+        return digits;
+        
+        
+       /*int length = digits.size();
+       int tempLength = length;
+       long long number = 0;
+       std::cout << sizeof(number) << endl;
+       for(int i=0; i < length; i++){
+            number += (long long)digits[i] * std::pow(10, --tempLength);
+            std::cout << number << endl;
+       }
+       std::cout << number << endl;
+       number++;
+       std::cout << number << endl;
+       int numOfDigits = getDigits(number); 
+       digits.resize(numOfDigits);
+       while(numOfDigits >= 0){
+           digits[--numOfDigits] = number%10;
+           number = number/10;
+       }
+       return digits;*/
+       
+    }
+};
