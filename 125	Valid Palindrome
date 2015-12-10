@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool isAlphaNumeric(char c){
+        int val = c;
+        return ((val >= 48 && val <= 57) || (val >= 65 && val <= 90) || (val >= 97 && val <= 122) );
+    }
+    bool isPalindrome(string s) {
+        int length = s.length();
+        int n = length-1; 
+        for(int i=0; i<length; i++){
+            if(!isAlphaNumeric(s[i])){
+                continue;
+            }
+            char front = std::tolower(s[i]);
+            while(!isAlphaNumeric(s[n])){
+                n--;
+            }
+            char end = std::tolower(s[n]);
+            n--;
+            if(front != end){
+                return false;
+            }
+            if(i>=n){
+                break;
+            }
+        }
+        return true;
+    }
+};
