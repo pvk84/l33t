@@ -1,0 +1,16 @@
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        std::map<int,int> dupMap;
+        int length = nums.size();
+        for(int i=0; i<length; i++){
+            int currValue = nums[i];
+            if((dupMap.find(currValue) != dupMap.end()) && (i -dupMap[currValue] <= k)){
+                return true;
+            }
+            //dupMap.insert(std::pair<int, int>(currValue,i));
+            dupMap[currValue] = i;
+        }
+        return false;
+    }
+};
