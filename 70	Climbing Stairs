@@ -1,0 +1,13 @@
+class Solution {
+        unordered_map<int, int> stepMap = {{1, 1}, {2, 2}, {3, 3}};
+public:
+    int climbStairs(int n) {
+        if(n == 1 || n == 2 || n == 3){
+            return stepMap[n];
+        }
+        if(stepMap.find(n) == stepMap.end()){
+            stepMap[n] = climbStairs(n-1)+climbStairs(n-2);
+        }
+        return stepMap[n];
+    }
+};
