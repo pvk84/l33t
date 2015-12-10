@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        int hayLength = haystack.length();
+        int needleLength = needle.length();
+        if(needleLength > hayLength){
+            return -1;
+        }else if(hayLength == needleLength){
+            if(haystack == needle){
+                return 0;
+            }else{
+                return -1;
+            }
+        }else if(needleLength == 0){
+            return 0;
+        }
+        int nl = 0;
+        int index = -1;
+        std::queue<int> positionQ;
+        for(int i=0; i< hayLength; i++){
+            if(nl>0 && haystack[i] == needle[0]){
+                    positionQ.push(i);
+                }
+            if(haystack[i] == needle[nl]){
+                if(index == -1){
+                    index = i;    
+                }
+                nl++;
+                if(nl == needleLength){
+                    break;
+                }
+            }else{
+                if(!positionQ.empty()){
+                    index = positionQ.front();
+                    positionQ.pop();
+                    i= index-1;
+                }else{
+                    index = -1;
+                }
+                nl=0;
+            }
+            if(i == hayLength-1){
+                index = -1;
+            }
+        }
+        return index;
+    }
+};
