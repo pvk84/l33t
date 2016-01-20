@@ -1,0 +1,21 @@
+class Solution {
+public:
+
+    void combination(std::vector<int>& vec, int pivot, int col, int& N, int& k, std::vector<std::vector<int>>& vecvec){
+        if(col == k){
+            vecvec.push_back(vec);
+            return;
+        }
+        for(int i= pivot; i <=N; i++){
+            vec[col] = i;
+            combination(vec, i+1, col+1, N, k, vecvec);
+        }
+    }
+    
+    vector<vector<int>> combine(int n, int k) {
+        std::vector<std::vector<int>> vecvec;
+        std::vector<int> vec(k, 0);
+        combination(vec, 1, 0, n, k, vecvec);
+        return vecvec;
+    }
+};
