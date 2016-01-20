@@ -1,0 +1,31 @@
+class Solution {
+public:
+    
+    void combination(std::vector<int>& vec, int pivot, int col, int& N, int& k, 
+                                        std::vector<int>& nums, std::vector<std::vector<int>>& vecvec){
+        if(col == k){
+            /*for(auto num: vec){
+                std::cout << num << " ";
+            }
+            std::cout << endl;*/
+            
+            vecvec.push_back(vec);
+            return;
+        }
+        for(int i= pivot; i < N; i++){
+            vec[col] = nums[i];
+            combination(vec, i+1, col+1, N, k, nums, vecvec);
+        }
+    }
+    
+    vector<vector<int>> subsets(vector<int>& nums) {
+        std::sort(nums.begin(), nums.end()); //because want it in ascending
+        std::vector<std::vector<int>> vecvec;
+        int n = nums.size();
+        for(int k = 0; k <= n; k++){
+            std::vector<int> vec(k, 0);
+            combination(vec, 0, 0, n, k, nums, vecvec);
+        }
+        return vecvec;
+    }
+};
