@@ -1,0 +1,53 @@
+class Solution {
+public:
+    
+    bool collision(std::vector<int>& vec, int row){
+        int tmp = 0;
+    	for(int i = 0; i < row; i++){
+    	    /*if(vec[i] == -1){
+    	        continue;
+    	    }*/
+    		tmp = vec[i] - vec[row];
+    		if (tmp == 0 || tmp == i - row || tmp == row - i){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    int N;
+    void backtrack(std::vector<int>& vec, int row, std::vector<std::vector<string>>& vecvec){
+        if(row == N){
+            std::vector<string> strVec(N, std::string(N, '.'));
+            for(int j =0; j < N; j++){
+                strVec[j][vec[j]] = 'Q';
+            }
+            vecvec.push_back(strVec);
+        }
+        
+        for(int i=0; i< N; i++){
+            vec[row] = i;
+            if(!collision(vec, row)){
+                backtrack(vec, row+1, vecvec);
+            }
+        }
+    }
+    
+    
+    
+    vector<vector<string>> solveNQueens(int n) {
+        std::vector<std::vector<string>> vecvec;
+        std::vector<int> vec(n+1, -1);
+        N = n;
+        backtrack(vec, 0, vecvec);
+        /*std::cout << "Done with backtrack: " << vecvec.size() << endl;
+        for(auto vect : vecvec ){
+            for(auto s: vect){
+                std::cout << s << " ";
+            }
+            std::cout << endl;
+        }*/
+        return vecvec;
+        
+    }
+};
