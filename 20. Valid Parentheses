@@ -1,0 +1,71 @@
+class Solution {
+    
+public:
+    Solution(){
+        
+    }
+    bool isValid_Old(string s) {
+        std::unordered_map<char, int> mMap;
+        std::unordered_map<char,char> pair;
+        pair['{'] = '}';pair['['] = ']';pair['('] = ')';
+        mMap['{'] = 0;
+        mMap['}'] = 0;
+        mMap['('] = 0;
+        mMap[')'] = 0;
+        mMap['['] = 0;
+        mMap[']'] = 0;
+        int sum = 0;
+        std::stack<char> openLatest;
+        char closeEarliest;
+        for(int i=0; i< s.length(); i++){
+            char c = s[i];
+            mMap[c]++;
+            if(mMap['}'] > mMap['{'] || mMap[']'] > mMap['['] || mMap[')'] > mMap['(']){
+                return false;
+            }
+            
+            if(c == '[' || c == '{' || c == '('){
+                openLatest.push(c);
+            }
+            if(c == ']' || c == '}' || c == ')'){
+                if(pair[openLatest.top()] != c){
+                    return false;
+                }else{
+                    openLatest.pop();
+                }
+            }
+            
+        }
+        
+        if(mMap['}'] != mMap['{'] || mMap[']'] != mMap['['] || mMap[')'] != mMap['(']){
+                return false;
+            }
+        
+        return true;
+    }
+    
+    bool isValid(string s){
+        std::stack<char> parenStack;
+        std::unordered_map<char,char> pair;
+        pair['{'] = '}';pair['['] = ']';pair['('] = ')';
+        for(int i=0; i< s.length(); i++){
+            char c = s[i];
+            
+            if(c == '[' || c == '{' || c == '('){
+                parenStack.push(c);
+            }
+            if(c == ']' || c == '}' || c == ')'){
+                if(parenStack.empty() || pair[parenStack.top()] != c){
+                    return false;
+                }else{
+                    parenStack.pop();
+                }
+            }
+        }
+        if(parenStack.size() > 0){
+            return false;
+        }
+        return true;
+    }
+    
+};
