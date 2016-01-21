@@ -1,0 +1,77 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void insertNode(ListNode*& pivot, ListNode*& node){
+        
+    }
+    ListNode* partition(ListNode* head, int x) {
+        ListNode* current = head;
+        ListNode* pivot = nullptr;
+        ListNode* prev = nullptr;
+        ListNode* pivotprev = nullptr;
+        bool pivotFound = false;
+        while(current){
+            if(!pivotFound){
+                if(current->val >= x){
+                    pivot = current;
+                    pivotprev = prev;
+                    pivotFound = true;
+                }
+            }else{
+                if(current->val < x){
+                    prev->next = current->next;
+                    if(pivotprev){
+                        pivotprev->next = current;
+                    }else{
+                        head = current;
+                    }
+                    current->next = pivot;
+                    pivotprev = current;
+                    current = prev;
+                }
+            }
+            prev = current;
+            current = current->next;
+        }
+        
+        if(!pivotFound){
+            return head;   
+        }
+        
+        /*current = head;
+        prev = nullptr;
+        ListNode* pivotnext = nullptr;
+        while(current && current != pivot){
+            std::cout << current->val << std::endl;
+            if(current->val > x){
+                if(prev){
+                    prev->next = current->next;
+                }else{
+                    head = pivot;
+                    pivot->next =current;
+                    break;
+                }
+                current->next = pivot->next;
+                if(pivotnext){
+                    pivotnext->next = current;
+                }else{
+                    pivot->next = current;
+                }
+                pivotnext = current;
+                
+                current = prev;
+            }
+            prev = current;
+            current = current->next;
+        }*/
+        //std::cout << head->val << ", " << head->next->val << std::endl;
+        return head;
+    }
+};
