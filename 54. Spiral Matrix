@@ -1,0 +1,55 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        int M = matrix.size();
+        std::vector<int> vec;
+        if(M == 0){
+            return vec;
+        }
+        int N = matrix[0].size();
+        int x = 0;
+        int y = 0;
+        int cx = M-1, cy = N-1;
+        
+        
+        int rem = 0;
+        int count = 0;
+        while(true){
+            if(rem%4 == 0){
+                for(int i=y; i <= cy; i++){
+                    //std::cout << matrix[x][i] << std::endl;
+                    vec.push_back(matrix[x][i]);
+                    count++;
+                }
+                x++;
+            }else if(rem%4 == 1){
+                for(int i=x; i <= cx; i++){
+                    //std::cout << matrix[i][cy] << std::endl;
+                    vec.push_back(matrix[i][cy]);
+                    count++;
+                }
+                cy--;
+            }else if(rem%4 == 2){
+                for(int i=cy; i >= y; i--){
+                    //std::cout << matrix[cx][i] << std::endl;
+                    vec.push_back(matrix[cx][i]);
+                    count++;
+                }
+                cx--;
+            }else if(rem%4 == 3){
+                for(int i=cx; i >= x; i--){
+                    //std::cout << matrix[i][y] << std::endl;
+                    vec.push_back(matrix[i][y]);
+                    count++;
+                }
+                y++;
+            }
+            
+            rem++;
+            if(count >= M*N){
+                break;
+            }
+        }
+        return vec;
+    }
+};
