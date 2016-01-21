@@ -3,42 +3,41 @@ public:
     vector<vector<int>> generateMatrix(int n) {
         std::vector<std::vector<int>> matrix(n, std::vector<int>(n, 0));
         int N = n;
-        int x = 0;
-        int y = 0;
-        int cx = N-1, cy = N-1;
+        int left = 0, top = 0;
+        int right = N-1, bottom = N-1;
         
         
         int rem = 0;
         int count = 1;
         while(true){
             if(rem%4 == 0){
-                for(int i=y; i <= cy; i++){
-                    //std::cout << matrix[x][i] << std::endl;
-                    matrix[x][i] = count;
+                for(int i=top; i <= bottom; i++){
+                    //std::cout << matrix[left][i] << std::endl;
+                    matrix[left][i] = count;
                     count++;
                 }
-                x++;
+                left++;
             }else if(rem%4 == 1){
-                for(int i=x; i <= cx; i++){
-                    //std::cout << matrix[i][cy] << std::endl;
-                    matrix[i][cy] = count;
+                for(int i=left; i <= right; i++){
+                    //std::cout << matrix[i][bottom] << std::endl;
+                    matrix[i][bottom] = count;
                     count++;
                 }
-                cy--;
+                bottom--;
             }else if(rem%4 == 2){
-                for(int i=cy; i >= y; i--){
-                    //std::cout << matrix[cx][i] << std::endl;
-                    matrix[cx][i] = count;
+                for(int i=bottom; i >= top; i--){
+                    //std::cout << matrix[right][i] << std::endl;
+                    matrix[right][i] = count;
                     count++;
                 }
-                cx--;
+                right--;
             }else if(rem%4 == 3){
-                for(int i=cx; i >= x; i--){
-                    //std::cout << matrix[i][y] << std::endl;
-                    matrix[i][y] = count;
+                for(int i=right; i >= left; i--){
+                    //std::cout << matrix[i][top] << std::endl;
+                    matrix[i][top] = count;
                     count++;
                 }
-                y++;
+                top++;
             }
             
             rem++;
