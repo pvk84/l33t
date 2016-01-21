@@ -1,0 +1,52 @@
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        std::vector<std::vector<int>> matrix(n, std::vector<int>(n, 0));
+        int N = n;
+        int x = 0;
+        int y = 0;
+        int cx = N-1, cy = N-1;
+        
+        
+        int rem = 0;
+        int count = 1;
+        while(true){
+            if(rem%4 == 0){
+                for(int i=y; i <= cy; i++){
+                    //std::cout << matrix[x][i] << std::endl;
+                    matrix[x][i] = count;
+                    count++;
+                }
+                x++;
+            }else if(rem%4 == 1){
+                for(int i=x; i <= cx; i++){
+                    //std::cout << matrix[i][cy] << std::endl;
+                    matrix[i][cy] = count;
+                    count++;
+                }
+                cy--;
+            }else if(rem%4 == 2){
+                for(int i=cy; i >= y; i--){
+                    //std::cout << matrix[cx][i] << std::endl;
+                    matrix[cx][i] = count;
+                    count++;
+                }
+                cx--;
+            }else if(rem%4 == 3){
+                for(int i=cx; i >= x; i--){
+                    //std::cout << matrix[i][y] << std::endl;
+                    matrix[i][y] = count;
+                    count++;
+                }
+                y++;
+            }
+            
+            rem++;
+            if(count > N*N){
+                break;
+            }
+        }
+        return matrix;
+    }
+    
+};
