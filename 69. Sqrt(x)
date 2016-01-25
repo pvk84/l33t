@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int mySqrt_old(int x) {
+        int root = x;
+        int prev = x;
+        while((long long)root*root > x){
+            prev = root;
+            root = root/2;
+        }
+        while((long long)root*root <= x){
+            root++;
+        }
+        return (root-1);
+    }
+    
+    int mySqrt(int x) {
+        int left = 1;
+        long long right = x;
+        long long mid = (left+right)/2;
+        //std::cout << mid << endl;
+        while(true){
+            if((long long)mid*mid > x){
+                right = mid;
+            }else if((long long)mid*mid < x){
+                left = mid;
+            }else{
+                return mid;
+            }
+            if(right-left <= 1){
+                //std::cout << right << "; " << left << endl;
+                return left;
+            }
+            mid = (left+right)/2;
+        }
+        return mid;
+    }
+    
+};
