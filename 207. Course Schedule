@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool hasCycle(int vertex, std::vector<std::list<int>>& adjList, 
+                std::vector<bool>& explored, std::vector<bool>& beingExplored){
+        beingExplored[vertex] = true;
+        for(auto v: adjList[vertex]){
+            //std::cout << v << endl;
+            if(!explored[v]){
+                if(beingExplored[v]){
+                    return true;
+                }else{
+                    bool val =  hasCycle(v, adjList, explored, beingExplored);
+                    if(val){
+                        return true;
+                    }
+                }
+            }
+        }
+        beingExplored[vertex] = false;
+        explored[vertex] = true;
+        return false;
+    }
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
+        std::vector<bool> explored(numCourses, false);
+        std::vector<bool> beingExplored(numCourses, false);
+        std::vector<std::list<int>> adjList(numCourses);
+        
+        for(auto reqPair: prerequisites){
+            adjList[reqPair.first].push_back(reqPair.second);
+        }
+        
+        for(int i=0; i<numCourses; i++){
+            if(!explored[i]){
+                if(hasCycle(i, adjList, explored, beingExplored)){
+                    //std::cout << "Cycle: " << i << endl;
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
