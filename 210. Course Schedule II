@@ -1,0 +1,51 @@
+class Solution {
+public:
+    bool hasCycle(int vertex, std::vector<std::list<int>>& adjList, 
+                std::vector<bool>& explored, std::vector<bool>& beingExplored,std::stack<int>& orderStack){
+        beingExplored[vertex] = true;
+        for(auto v: adjList[vertex]){
+            //std::cout << v << endl;
+            if(!explored[v]){
+                if(beingExplored[v]){
+                    return true;
+                }else{
+                    bool val =  hasCycle(v, adjList, explored, beingExplored, orderStack);
+                    if(val){
+                        return true;
+                    }
+                }
+            }
+        }
+        orderStack.push(vertex);
+        beingExplored[vertex] = false;
+        explored[vertex] = true;
+        return false;
+    }
+    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
+        std::vector<bool> explored(numCourses, false);
+        std::vector<bool> beingExplored(numCourses, false);
+        std::vector<std::list<int>> adjList(numCourses);
+        std::stack<int> orderStack;
+        
+        
+        for(auto reqPair: prerequisites){
+            adjList[reqPair.second].push_back(reqPair.first); // as per question...direction is in reverse order
+        }
+        
+        
+        for(int i=0; i<numCourses; i++){
+            if(!explored[i]){
+                if(hasCycle(i, adjList, explored, beingExplored, orderStack)){
+                    //std::cout << "Cycle: " << i << endl;
+                    return {};
+                }
+            }
+        }
+        std::vector<int> order;
+        while(!orderStack.empty()){
+            order.push_back(orderStack.top());
+            orderStack.pop();
+        }
+        return order;
+    }
+};
