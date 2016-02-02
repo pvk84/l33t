@@ -9,12 +9,24 @@
  */
 class Solution {
 public:
-    void swapVal(TreeNode *one, TreeNode *two){
-        int temp = one->val;
-        one->val = two->val;
-        two->val = temp;
+    void swapNode(TreeNode *node){
+        if(!node){
+            return;
+        }
+        TreeNode* temp = node->left;
+        node->left = node->right;
+        node->right = temp;
     }
     TreeNode* invertTree(TreeNode* root) {
-        
+        if(!root){
+            return nullptr;
+        }
+        TreeNode* left = root->left;
+        TreeNode* right = root->right;
+        swapNode(root);
+        invertTree(root->left);
+        invertTree(root->right);
+
+        return root;
     }
 };
