@@ -1,0 +1,80 @@
+class MedianFinder {
+public:
+    
+    MedianFinder(){
+        
+    }
+
+    // Adds a number into the data structure.
+    void addNum(int num) {
+        if(minHeap.empty() && maxHeap.empty()){
+            maxHeap.push(num);
+        }else{
+            //minheap top should always be >= maxheap top and size diff in {-1,0,1} 
+            int sizediff = minHeap.size() - maxHeap.size();
+            if(sizediff == 0){
+                if(minHeap.top() >= num){
+                    maxHeap.push(num);
+                }else{
+                    int temp = minHeap.top();
+                    minHeap.pop();
+                    maxHeap.push(temp);
+                    minHeap.push(num);
+                }
+            }else if(sizediff == 1){
+                if(minHeap.top() >= num){
+                   maxHeap.push(num); 
+                }else{
+                    int temp = minHeap.top();
+                    minHeap.pop();
+                    maxHeap.push(temp);
+                    minHeap.push(num);
+                }
+            }else if(sizediff == -1){
+                if(maxHeap.top() <= num){
+                    minHeap.push(num);
+                }else{
+                    int temp = maxHeap.top();
+                    maxHeap.pop();
+                    minHeap.push(temp);
+                    maxHeap.push(num);
+                }
+            }else{
+                // cannot happen
+                std::cout << "ERROR!" << endl;
+            }
+        }
+    }
+
+    // Returns the median of current data stream
+    double findMedian() {
+        
+        if(minHeap.empty() && maxHeap.empty()){
+            return -1;
+        }else if(minHeap.empty()){
+            return maxHeap.top();
+        }else if(maxHeap.empty()){
+            return minHeap.top();
+        }else{
+            double median;
+            if(minHeap.size() == maxHeap.size()){
+                median = ((double)(minHeap.top()+maxHeap.top()))/2;
+            }else if(minHeap.size() > maxHeap.size()){
+                median = minHeap.top();
+            }else{
+                median = maxHeap.top();
+            }
+            return median;
+        }
+        
+    }
+    
+private:
+std::priority_queue<int> maxHeap;
+std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;
+};
+
+// Your MedianFinder object will be instantiated and called as such:
+// MedianFinder mf;
+// mf.addNum(1);
+// mf.findMedian();
