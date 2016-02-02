@@ -1,0 +1,71 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+
+    std::vector<TreeNode*> subTrees(int i, int j){
+        std::vector<TreeNode*> trees;
+        if( i > j){
+            trees.push_back(nullptr);
+            return trees;
+        }
+        
+        for(int index=i; index <= j; index++){
+            //index is root ... 
+            
+            std::vector<TreeNode*> leftArr = subTrees(i, index-1);
+            std::vector<TreeNode*> rightArr = subTrees(index+1, j);
+            for(auto leftNode : leftArr){
+                for(auto rightNode: rightArr){
+                    TreeNode* node = new TreeNode(index);
+                    node->left = leftNode;
+                    node->right = rightNode;
+                    trees.push_back(node);
+                }    
+            }
+            
+        }
+        
+        return trees;
+    }
+    
+    void treeHelper(int n, std::vector<std::vector<TreeNode*>>& vecvec){
+        if(n == 0){
+            return;
+        }
+        std::vector<TreeNode*> trees;
+        for(int index=1; index <= n; index++){
+            //i is root ... 
+            
+            std::vector<TreeNode*> leftArr = subTrees(0, index-1);
+            std::vector<TreeNode*> rightArr = subTrees(n-index, n);
+            for(auto leftNode : leftArr){
+                for(auto rightNode: rightArr){
+                    TreeNode* node = new TreeNode(index);
+                    node->left = leftNode;
+                    node->right = rightNode;
+                    trees.push_back(node);
+                }    
+            }
+            
+        }
+        
+        vecvec[n] = trees;
+    }
+    
+    vector<TreeNode*> generateTrees(int n) {
+        if(n == 0){
+            return std::vector<TreeNode*>();
+        }
+        //std::vector<std::vector<TreeNode*>> catalanNodes(n+1);
+        //treeHelper(n, catalanNodes);
+        return subTrees(1, n);
+    }
+};
