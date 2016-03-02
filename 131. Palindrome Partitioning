@@ -1,0 +1,39 @@
+class Solution {
+public:
+    
+    bool isPalindrome(string s){
+        int len = s.size();
+        for(int i=0; i< len/2; i++){
+            if(s.at(i) != s.at(len-1-i)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void subStrings(int start, string& s, std::vector<string> subVec, 
+                            std::vector<std::vector<string>>& partitionVec){
+        int len = s.size();
+        if(start == len){
+            partitionVec.push_back(subVec);
+            return;
+        }else if(start > len){
+            return;
+        }
+        for(int i=1; i <= len-start; i++){
+            std::string subStr = s.substr(start, i);
+            if(!isPalindrome(subStr)){
+                continue;
+            }
+            subVec.push_back(subStr);
+            subStrings(start+i, s, subVec, partitionVec);
+            subVec.pop_back();
+        }
+    }
+    vector<vector<string>> partition(string s) {
+        std::vector<std::vector<string>> partitionVec;
+        std::vector<string> subVec;
+        subStrings(0, s, subVec, partitionVec);
+        return partitionVec;
+    }
+};
