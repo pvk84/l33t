@@ -15,17 +15,14 @@ public:
             return;
         }
         
-        {
-            int count = 0;
-            int candidate = candidates[start];
-            std::vector<int> nextVec(sumVec);
-            while(sum+count*candidate <= target){
-                if(count > 0){
-                    sumVec.push_back(candidate);
-                }
-                combinationSum(start+1, sum+count*candidate, sumVec, target, candidates, combinations);
-                count++;
+        int count = 0;
+        int candidate = candidates[start];
+        while(sum+count*candidate <= target){
+            if(count > 0){
+                sumVec.push_back(candidate);
             }
+            combinationSum(start+1, sum+count*candidate, sumVec, target, candidates, combinations);
+            count++;
         }
         
     }
