@@ -1,10 +1,10 @@
 class Solution {
 public:
 
-    void combinationSum_Old(int start, int sum, std::vector<int> sumVec, int target, vector<int>& candidates, 
+    void combinationSum(int start, int sum, std::vector<int> sumVec, int target, vector<int>& candidates, 
                                                     std::vector<std::vector<int>>& combinations) {
         if(sum == target){
-            std::sort(sumVec.begin(), sumVec.end());
+            //std::sort(sumVec.begin(), sumVec.end());
             combinations.push_back(sumVec);
             return;
         }else if(sum > target){
@@ -27,9 +27,38 @@ public:
         
     }
     
+    void combinationSum_alt(int start, int sum, std::vector<int> sumVec, int target, vector<int>& candidates, 
+                                                    std::vector<std::vector<int>>& combinations) {
+        if(sum == target){
+            combinations.push_back(sumVec);
+            return;
+        }else if(sum > target){
+            return;
+        }
+        
+        if(start >= candidates.size()){
+            return;
+        }
+        
+        int candidate = candidates[start];
+        int count = (target-sum)/candidate;
+        int temp = count;
+        while(temp > 0){
+            sumVec.push_back(candidate);
+            temp--;
+        }
+        while(count >= 0){
+            combinationSum(start+1, sum+count*candidate, sumVec, target, candidates, combinations);
+            sumVec.pop_back();
+            count--;
+        }
+        
+    }
+    
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
         std::vector<std::vector<int>> combinations;
         std::vector<int> sumVec;
+        std::sort(candidates.begin(), candidates.end());
         combinationSum(0, 0, sumVec, target, candidates, combinations);
         return combinations;
     }
