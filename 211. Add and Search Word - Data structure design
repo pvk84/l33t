@@ -1,0 +1,94 @@
+
+class TrieNode{
+public:
+    std::unordered_map<char, TrieNode*> trieMap;
+    char ch;
+    bool isWord;
+    TrieNode(char c):ch(c), isWord(false){
+        
+    }
+    TrieNode():ch('\0'), isWord(false){
+        
+    }
+    bool contains(char c){
+        return (trieMap.find(c) != trieMap.end());
+    }
+    TrieNode* get(char c){
+        if(contains(c)){
+            return trieMap[c];
+        }
+        return nullptr;
+    }
+    void add(char c){
+        trieMap.insert(std::make_pair(c, new TrieNode(c)));
+    }
+};
+
+
+class WordDictionary {
+public:
+    
+    TrieNode* rootNode;
+    
+    WordDictionary(){
+        rootNode = new TrieNode();
+    }
+    
+    // Adds a word into the data structure.
+    void addWord(string word) {
+        TrieNode* node = rootNode;
+        for(char c: word){
+            if(!node->contains(c)){
+                node->add(c);
+            }
+            node = node->get(c);
+        }
+        node->isWord = true;
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    
+    bool search(string word, TrieNode* node) {
+        int len = word.size();
+        TrieNode* tempNode;
+        char ch = word.at(0);
+        if(ch != '.'){
+            if(node->contains(ch)){
+                node = node->get(ch);
+                if(len == 1){
+                    return node->isWord;
+                }else{
+                    return search(word.substr(1), node);
+                }
+            }
+        }else{
+            bool isWord = false;
+            for(auto pair: node->trieMap){
+                TrieNode* chNode = pair.second;
+                if(len == 1){
+                    if(chNode->isWord){
+                        return true;
+                    }
+                }else{
+                    if(search(word.substr(1), chNode)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    bool search(string word) {
+        if(word.empty()){
+            return false;
+        }
+        return search(word, rootNode);
+    }
+};
+
+// Your WordDictionary object will be instantiated and called as such:
+// WordDictionary wordDictionary;
+// wordDictionary.addWord("word");
+// wordDictionary.search("pattern");
