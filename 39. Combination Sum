@@ -1,0 +1,39 @@
+class Solution {
+public:
+
+    void combinationSum_Old(int start, int sum, std::vector<int> sumVec, int target, vector<int>& candidates, 
+                                                    std::vector<std::vector<int>>& combinations) {
+        if(sum == target){
+            std::sort(sumVec.begin(), sumVec.end());
+            combinations.push_back(sumVec);
+            return;
+        }else if(sum > target){
+            return;
+        }
+        
+        if(start >= candidates.size()){
+            return;
+        }
+        
+        {
+            int count = 0;
+            int candidate = candidates[start];
+            std::vector<int> nextVec(sumVec);
+            while(sum+count*candidate <= target){
+                if(count > 0){
+                    sumVec.push_back(candidate);
+                }
+                combinationSum(start+1, sum+count*candidate, sumVec, target, candidates, combinations);
+                count++;
+            }
+        }
+        
+    }
+    
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        std::vector<std::vector<int>> combinations;
+        std::vector<int> sumVec;
+        combinationSum(0, 0, sumVec, target, candidates, combinations);
+        return combinations;
+    }
+};
