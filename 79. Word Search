@@ -1,0 +1,79 @@
+class Solution {
+public:
+    std::vector<pair<int, int>> neighbors{std::make_pair(-1,0), std::make_pair(1,0), std::make_pair(0,-1), 
+                                            std::make_pair(0,1)};
+    bool isValid(int x, int y, vector<vector<char>>& board){
+        int X = board.size();
+        int Y = board[0].size();
+        if((x >= 0 && x <X) && (y >=0 && y < Y)){
+            return true;
+        }
+        return false;
+    }
+    std::unordered_map<char, std::pair<int, int>> charMap;
+    
+    bool exist(int xPos, int yPos, int pos, string res, //std::vector<std::vector<bool>>& visited,
+                    string& word, vector<vector<char>>& board) {
+        if(pos == word.length()-1){
+            if(word == res){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        bool exists = false;
+        //visited[xPos][yPos] = true;
+        char temp = board[xPos][yPos]; // this made it 50% faster instead of another array
+        board[xPos][yPos] = '\0';
+        for(std::pair<int, int> neighbor: neighbors){
+            int x = xPos+neighbor.first;
+            int y = yPos+neighbor.second;
+            bool valid = isValid(x,y,board);
+            if(valid){
+                /*if(visited[x][y]){
+                    continue;
+                }*/
+                if(board[x][y] == word.at(pos+1)){
+                    //visited[x][y] = true;
+                    if(exist(x, y, pos+1, res+word.at(pos+1), word, board)){
+                        return true;
+                    }
+                    //visited[x][y] = false;
+                }
+            }
+        }
+        board[xPos][yPos] = temp;
+        //visited[xPos][yPos] = false;
+        return exists;
+    }
+    
+    bool exist(vector<vector<char>>& board, string word) {
+        int X = board.size();
+        if(X < 1){
+            return false;
+        }
+        int Y = board[0].size();
+        if(word.empty()){
+            return false;
+        }
+        
+        
+        bool exists = false;
+        for(int i = 0; i< X; i++){
+            for(int j=0; j< Y; j++){
+                if(word.at(0) == board[i][j]){
+                    string res; res.push_back(word.at(0));
+                    //std::vector<std::vector<bool>> visited(X, std::vector<bool>(Y, false));
+                    
+                    if(exist(i, j, 0, res, word, board)){
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    
+};
