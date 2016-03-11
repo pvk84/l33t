@@ -18,10 +18,10 @@ public:
         return true;
     }
     
-    int numDecodings(string& s, int begin, int end, std::vector<std::vector<int>>& dp){
+    int numDecodings(string& s, int begin, int end, std::vector<int>& dp){
         //std::cout << begin << ": " << end << endl;
-        if(dp[begin][end] != -1){
-            return dp[begin][end];
+        if(dp[begin] != -1){
+            return dp[begin];
         }
         int decodings = 0;
         
@@ -34,7 +34,7 @@ public:
                     firstDecodings = 1;    
                 }else{
                     firstDecodings = numDecodings(s, begin+1, end, dp);
-                    dp[begin+1][end] = firstDecodings;
+                    dp[begin+1] = firstDecodings;
                 }
             }
             decodings+= firstDecodings;
@@ -48,13 +48,13 @@ public:
                     secondDecodings = 1;
                 }else{
                     secondDecodings = numDecodings(s, begin+2, end, dp);
-                    dp[begin+2][end] = secondDecodings;
+                    dp[begin+2] = secondDecodings;
                 }
             }
             decodings+= secondDecodings;
         }
         
-        dp[begin][end] = decodings;
+        dp[begin] = decodings;
         
         return decodings;
         
@@ -65,7 +65,7 @@ public:
             return 0;
         }
         int size = s.length();
-        std::vector<std::vector<int>> dp(size, std::vector<int>(size, -1));
+        std::vector<int> dp(size, -1);
         return numDecodings(s, 0, size-1, dp);
     }
 };
