@@ -1,108 +1,71 @@
 class Solution {
 public:
-    std::vector<int> dpMap;
-    std::vector<string> result;
-    Solution(){
-        //alphabetString = "-ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    
+    bool isValid(string str){
+        if(str.empty()){
+            return false;
+        }
+        if(str.length() > 2){
+            throw "Invalid string";
+        }
+        if(str.at(0) == '0'){
+            return false;
+        }
+        int num = std::stoi(str);
+        if(num > 26){
+            return false;
+        }
+        return true;
     }
     
-    int dp(string& s, int N){
-        if(N ==0){
-            return 0;
+    int numDecodings(string& s, int begin, int end, std::vector<std::vector<int>>& dp){
+        //std::cout << begin << ": " << end << endl;
+        if(dp[begin][end] != -1){
+            return dp[begin][end];
         }
+        int decodings = 0;
         
-        //char last1Str = s.at(N-1);
-        int last1 = s.at(N-1) - '0';
-        if(N == 1){
-            if(last1 == 0){
-                return 0;
-            }else{
-                return 1;
+        if(end-begin >= 0){
+            string first = s.substr(begin, 1);
+            int firstDecodings = 0;
+            
+            if(isValid(first)){
+                if(begin+1 > end){
+                    firstDecodings = 1;    
+                }else{
+                    firstDecodings = numDecodings(s, begin+1, end, dp);
+                    dp[begin+1][end] = firstDecodings;
+                }
             }
+            decodings+= firstDecodings;
         }
         
-        int last2 = s.at(N-2)-'0';
-        int count = 0;
-        
-        if(last2 == 0){
-            count = 0;
-        }else if(last1 == 0){
-            if(last2 < 3){
-                count = 1;
-            }else{
-                count = 0;
+        if(end-begin >= 1){
+            string second = s.substr(begin, 2);
+            int secondDecodings = 0;
+            if(isValid(second)){
+                if(begin+2 > end){
+                    secondDecodings = 1;
+                }else{
+                    secondDecodings = numDecodings(s, begin+2, end, dp);
+                    dp[begin+2][end] = secondDecodings;
+                }
             }
-        }else if(last2*10+last1 > 26){
-            count = 1;
-        }else if(last2*10+last1 <= 26){
-            count = 2;
+            decodings+= secondDecodings;
         }
         
-        if(N == 2){
-           return count; 
-        }
+        dp[begin][end] = decodings;
         
-        if(last1 > 0 && dpMap[N-1] == 0){
-            dpMap[N-1] = dp(s, N-1);
-        }
-        
-        if(count>0 && dpMap[N-2] == 0){
-            dpMap[N-2] = dpMap[N-2] = dp(s, N-2);
-        }
-        dpMap[N] = (last1 > 0 ? dpMap[N-1] : 0)+(count>0 ? dpMap[N-2] : 0);
-        return dpMap[N];
-    }
-    
-    int dp_new(string& s, int N){
-        if(N ==0){
-            return 0;
-        }
-        
-        if(N ==0){
-            return 0;
-        }
-        
-        //char last1Str = s.at(N-1);
-        int last1 = s.at(N-1) - '0';
-        if(N == 1){
-            if(last1 == 0){
-                return 0;
-            }else{
-                return 1;
-            }
-        }
-        
-        int last2 = s.at(N-2)-'0';
-        int count = 0;
-        
-        if(last2 == 0){
-            count = 0;
-        }else if(last1 == 0){
-            if(last2 < 3){
-                count = 1;
-            }else{
-                count = 0;
-            }
-        }else if(last2*10+last1 > 26){
-            count = 1;
-        }else if(last2*10+last1 <= 26){
-            count = 2;
-        }
-        
-        if(N == 2){
-           return count; 
-        }
-        
-        
+        return decodings;
         
     }
     
     int numDecodings(string s) {
-        int size = s.length();
-        if(size < 1){
-            return size;
+        if(s.empty()){
+            return 0;
         }
-        dpMap.resize(size+1, 0);
-        return dp(s, size);
+        int size = s.length();
+        std::vector<std::vector<int>> dp(size, std::vector<int>(size, -1));
+        return numDecodings(s, 0, size-1, dp);
     }
 };
