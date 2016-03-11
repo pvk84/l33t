@@ -1,0 +1,94 @@
+class Solution {
+public:
+    bool isNeighbor(string& fromWord, string& toWord){
+        if(fromWord.length() != toWord.length()){
+            return false;
+        }
+        int diff = 0;
+        for(int i = 0; i< fromWord.length(); i++){
+            if(fromWord.at(i) != toWord.at(i)){
+                diff++;
+            }
+        }
+        return (diff == 1);
+    }
+    
+    std::vector<std::string> getNeighbors(string word, unordered_set<string>& wordList){
+        std::vector<string> wdList;
+        for(auto wd: wordList){
+            if(isNeighbor(word, wd)){
+                wdList.push_back(wd);
+            }
+        }
+        return wdList;
+    }
+    
+    int ladderLength(string beginWord, string endWord, unordered_set<string>& wordList) {
+        wordList.insert(endWord);
+        std::queue<string> mQ;
+        mQ.push(beginWord);
+        int minLength = 1;
+        std::unordered_map<string, int> height;
+        std::unordered_map<string, bool> visitedList;
+        while(!mQ.empty()){
+            string word  = mQ.front();
+            mQ.pop();
+            if(visitedList.find(word) != visitedList.end()){
+                continue;
+            }
+            visitedList[word] = true;
+            
+            string temp = word;
+            for(int i=0; i< temp.length(); i++){
+                for(int j=0; j< 26; j++){
+                    temp[i] = 'a'+j;
+                    if(wordList.find(temp) != wordList.end()){
+                        if(temp == endWord){
+                            return minLength+1;
+                        }
+                        mQ.push(temp);
+                    }
+                }
+                temp = word;
+            }
+            if(!mQ.empty()){
+                minLength++;
+            }
+        }
+        
+        return 0;
+    }
+    
+    int ladderLength_slow(string beginWord, string endWord, unordered_set<string>& wordList) {
+        if(isNeighbor(beginWord, endWord)){
+            return 1;
+        }
+        std::queue<string> mQ;
+        mQ.push(beginWord);
+        int minLength = INT_MAX;
+        std::unordered_map<string, int> height;
+        std::unordered_map<string, bool> visitedList;
+        height[beginWord] = 0;
+        while(!mQ.empty()){
+            string word  = mQ.front();
+            mQ.pop();
+            if(visitedList.find(word) != visitedList.end()){
+                continue;
+            }
+            visitedList[word] = true;
+            auto neighbors = getNeighbors(word, wordList);
+            for(auto neighbor: neighbors){
+                height[neighbor] = height[word]+1;
+                mQ.push(neighbor);
+                if(isNeighbor(neighbor, endWord))
+                {
+                    std:min(minLength, height[neighbor]);
+                }
+            }
+        }
+        if(minLength == INT_MAX){
+            return 0;
+        }
+        return minLength;
+    }
+};
