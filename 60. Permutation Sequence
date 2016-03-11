@@ -1,0 +1,99 @@
+class Solution {
+public:
+    
+    void nextPermutation(string& sequence) {
+        int k = -1, len = sequence.size();
+        for(int i=len-2; i>= 0; i--){
+            if(sequence[i] < sequence[i+1]){
+                k = i;
+                break;
+            }
+        }
+        
+        // 5 4 3 2 1
+        if(k == -1){
+            std::reverse(sequence.begin(), sequence.end());
+            return;
+        }
+        
+        //[1,2,4,7,6,5,3]
+        int l = -1;
+        for(int i=len-1; i > k; i--){
+            if(sequence[i] >sequence[k]){
+                l = i;
+                break;
+            }
+        }
+        
+        std::swap(sequence[k], sequence[l]);
+        std::reverse(sequence.begin()+k+1, sequence.end());
+    }
+    
+    long long factorial(int n){
+        if(n == 0){
+            return 1;
+        }
+        long long product = 1;
+        while(n > 0){
+            product *= n;
+            n--;
+        }
+        return product;
+    }
+    
+    string getPermutation_Old(int n, int k) {
+        std:string sequence;
+        for(int i=1; i<= n; i++){
+            sequence.push_back('0'+i);
+        }
+        while(--k){
+            nextPermutation(sequence);
+        }
+        return sequence;
+    }
+    
+    string getPermutation(int n, int k) {
+        std:string sequence;
+        
+        for(int i=1; i<= n; i++){
+            sequence.push_back('0'+i);
+        }
+        
+        int index = 0; 
+        long long fact = 1;
+        for(int i=1; i<= n; i++){
+            if(fact*i >= k){
+                if(fact*i == k){
+                    fact = fact*i;
+                }
+                index = n-i;
+                break;
+            }else{
+                fact = i*fact;
+            }
+        }
+        
+        int newIndex;
+        if(k%fact == 0){
+            newIndex = index+k/fact-1;
+            k = fact;
+        }else{
+            newIndex = index+(k/fact);
+            k = k%fact;
+        }
+        
+        
+        
+        if(newIndex <= n-1){
+            char c = sequence[newIndex];
+            sequence.erase(newIndex, 1);
+            sequence.insert(sequence.begin()+index, c);
+        }
+        while(--k > 0){
+            nextPermutation(sequence);
+        }
+        return sequence;
+    }
+    
+    
+};
