@@ -1,0 +1,50 @@
+class Solution {
+public:
+    
+    
+    bool wordBreak(string s, unordered_set<string>& dict, std::unordered_map<string, bool>& dp) {
+        //std::cout << "wordBreak: " << s << endl;
+        
+        int len = s.size();
+        
+        if(dp.find(s) != dp.end()){
+            return dp[s];
+        }
+        
+        if(dict.find(s) != dict.end()){
+            dp[s] = true;
+            return true;
+        }else{
+            dp[s] = false;
+        }
+        
+        bool res = false;
+        
+        for(int i=0; i< len; i++){
+            string first = s.substr(0, i+1);
+            bool firstRes = wordBreak(first, dict, dp);;
+            dp[first] = firstRes;
+            
+            bool secondRes = true;
+            if(i < len-1){
+                string second = s.substr(i+1);
+                secondRes = wordBreak(second, dict, dp);
+                dp[second] = secondRes;
+            }
+            
+            if(firstRes && secondRes){
+                res = true;
+                break;
+            }
+            
+        }
+        dp[s] = res;
+        return res;
+    }
+
+    bool wordBreak(string s, unordered_set<string>& wordDict) {
+        int len = s.length();
+        std::unordered_map<string, bool> dp;
+        return wordBreak(s, wordDict, dp);
+    }
+};
