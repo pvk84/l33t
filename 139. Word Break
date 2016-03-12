@@ -41,8 +41,28 @@ public:
         dp[s] = res;
         return res;
     }
-
+    
     bool wordBreak(string s, unordered_set<string>& wordDict) {
+        int len = s.length();
+        std::vector<bool> dp(len, false);
+        for(int i=0; i< len; i++){
+            for(int j=i; j < len; j++){
+                std::string str = s.substr(i, j-i+1);
+                //std::cout << str << std::endl;
+                if(!dp[j] && wordDict.find(str) != wordDict.end()){
+                    if(i >= 1){
+                        dp[j] = dp[i-1]; 
+                    }else{
+                        dp[j] = true;
+                    }
+                }
+                
+            }
+        }
+        return dp[len-1];
+    }
+
+    bool wordBreak_Old(string s, unordered_set<string>& wordDict) {
         int len = s.length();
         std::unordered_map<string, bool> dp;
         return wordBreak(s, wordDict, dp);
