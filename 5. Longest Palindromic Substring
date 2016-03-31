@@ -1,0 +1,107 @@
+class Solution {
+public:
+    bool isPalindrome(string& s, int begin, int end, std::vector<std::vector<int>>& dp){
+        while(begin <= end && s[begin] == s[end]){
+            begin++;
+            end--;
+        }
+        if(begin > end){
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
+    
+    int longestPalindrome(string& s, int begin, int end, std::vector<std::vector<int>>& dp, int& l, int& k){
+        //int len = s.length();
+        if(begin > end){
+            return 0;
+        }
+        if(begin == end){
+            dp[begin][end] = 1;
+            return 1;
+        }
+        if(dp[begin][end] != 0){
+            return dp[begin][end];
+        }
+        //l = begin; k = end;
+        int max = 1, prev = 1;
+        if(s[begin] == s[end]){
+            prev = longestPalindrome(s, begin+1, end-1, dp, l, k);
+            if(prev == end-begin-1){
+                l = begin; end = k;
+                max = 2+prev;
+            }else{
+                max = prev;
+            }
+        }
+        {
+            prev = dp[begin][end] = longestPalindrome(s, begin, end-1, dp,l, k);
+            max = std::max(prev, max);
+            
+            prev = dp[begin][end] = longestPalindrome(s, begin+1, end, dp, l, k);
+            max = std::max(prev, max);
+        }
+        dp[begin][end] = max;
+        return dp[begin][end];
+    }
+    
+    string longestPalindrome_Old(string s) {
+        int len = s.length();
+        std::vector<std::vector<int>> dp(len, std::vector<int>(len, 0));
+        
+        int max = 0, begin = 0, end = 0;
+        longestPalindrome(s, 0, len-1, dp, begin, end);
+        std::cout << begin << ":" << end << ", " << endl;
+        for(int i=0; i< len; i++){
+            for(int j=i; j< len; j++){
+                //std::cout << i << ":" << j << ", " << dp[i][j] << endl;
+                if(dp[i][j] > max){
+                    std::cout << i << ":" << j << ", " << dp[i][j] << endl;
+                    max = dp[i][j];
+                    begin = i; end = j;
+                }
+            }
+        }
+        std::cout << begin << ":" << end << ", " << dp[begin][end] << endl;
+        return s.substr(begin, end-begin+1);
+    }
+    
+    string longestPalindrome(string s) {
+        int sLen = s.length();
+        //std::vector<std::vector<bool>> dp(1000, std::vector<bool>(1000, false));
+        //bool dp[1000][1000] {false};
+        bool dp[sLen][sLen] = {false};
+
+        int begin = 0, maxLen = 1;
+        for(int i=0; i< sLen; i++){
+            dp[i][i] = true;
+        }
+        for(int i=0; i< sLen-1; i++){
+            if(s[i] == s[i+1]){
+                dp[i][i+1] = true;
+                begin = i;
+                maxLen = 2;
+            }
+        }
+        
+        int j;
+        for(int len = 3; len <= sLen; len++){
+            for(int i=0; i< sLen-len+1; i++){
+                j = i+len-1;
+                if(dp[i+1][j-1] && s.at(i) == s.at(j)){
+                    dp[i][j] = true;
+                    //if(len > maxLen)
+                    {
+                        begin = i;
+                        maxLen = len;
+                    }
+                }
+            }
+        }
+        return s.substr(begin, maxLen);
+        
+    }
+    
+};
