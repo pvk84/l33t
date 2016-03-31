@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int maxDP(vector<int>& nums, int n){
+        if(n < 2){
+            return 0;
+        }
+        if(nums[n-1] >= nums[n]){
+            return std::max(maxDP(nums, n-1), maxDP(nums, n-2)+1);
+        }else{
+            return std::max(maxDP(nums, n-2), maxDP(nums, n-1)+1);
+        }
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        int N = nums.size();
+        if(N <= 1 ){
+            return N;
+        }
+        std::vector<int> lisVec(N, 1);
+        int max = 0;
+        for(int i=1; i< N; i++){
+            for(int j =0; j< i; j++){
+                if(nums[j] < nums[i]){
+                    lisVec[i] = std::max(lisVec[i], lisVec[j]+1);
+                    //std::cout << i <<": " << lisVec[i] << endl;
+                }
+            }
+            max = std::max(max, lisVec[i]);
+        }
+        return max;
+    }
+};
