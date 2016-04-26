@@ -31,7 +31,7 @@ public:
         return prev;
     }
     
-    ListNode* reverseKGroup(ListNode* head, int k) {
+    ListNode* reverseKGroup_recursive(ListNode* head, int k) {
         int len = 0;
         ListNode* current = head;
         while(current){
@@ -42,4 +42,62 @@ public:
         return reverse(head, k, len);
         
     }
+    
+    
+    ListNode* reverseKGroup_iterative(ListNode*& head, int k) {
+        int len = 0;
+        ListNode* current = head;
+        while(current){
+            len++;
+            current = current->next;
+        }
+        
+        if(k > len){
+            return head;
+        }
+        
+        ListNode* newHead = nullptr;
+        ListNode* prev = nullptr;
+        current = head;
+        ListNode* tail = nullptr;
+        ListNode* prevTail = nullptr;
+        
+        while(len >= k){
+            tail = current;
+            prev = nullptr;
+            int loopLen = 0;
+            while(current){
+                ListNode* next = current->next;
+                current->next = prev;
+                prev = current;
+                current = next;
+                loopLen++;
+                if(loopLen == k){
+                    if(!newHead){
+                        newHead = prev;
+                    }
+                    
+                    if(prevTail){
+                        prevTail->next = prev;
+                    }
+                    
+                    break;
+                }
+            }
+            prevTail = tail;
+            len = len-k;
+        }
+        
+        if(prevTail && current){
+            prevTail->next = current;
+        }
+        
+        return newHead;
+        
+    }
+    
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        return reverseKGroup_iterative(head, k);
+    }
+    
 };
