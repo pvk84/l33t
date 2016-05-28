@@ -1,0 +1,55 @@
+class Solution {
+public:
+    
+    bool isPalindrome(string& str){
+        int i = 0, j = str.size()-1;
+        for(int i = 0, j = str.size()-1; i< j; i++, j--){
+            if(str[i] != str[j]){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    vector<vector<int>> palindromePairs(vector<string>& words) {
+        std::unordered_map<std::string, int> reverseMap;
+        std::vector<std::vector<int>> pairVec;
+        
+        std::vector<int> emptyVec;
+        std::vector<int> palindromeVec;
+        
+        for(int i=0; i< words.size(); i++){
+            std::string word = words[i];
+            std::reverse(word.begin(), word.end());
+            reverseMap[word] = i;
+        }
+        
+        for(int i=0; i< words.size(); i++){
+            std::string word = words[i];
+            for(int j=0; j<= word.length(); j++){
+                std::string sub1 = word.substr(0, j);
+                std::string sub2 = word.substr(j);
+                if(reverseMap.find(sub1) != reverseMap.end() && isPalindrome(sub2)){
+                    int pairIndex = reverseMap[sub1];
+                    if(i != pairIndex){
+                        std::vector<int> pair;
+                        pair.push_back(i);
+                        pair.push_back(pairIndex);
+                        pairVec.push_back(pair);
+                    }
+                }
+                if(reverseMap.find(sub2) != reverseMap.end() && isPalindrome(sub1) && !sub1.empty()){
+                    int pairIndex = reverseMap[sub2];
+                    if(i != pairIndex){
+                        std::vector<int> pair;
+                        pair.push_back(pairIndex);
+                        pair.push_back(i);
+                        pairVec.push_back(pair);
+                    }
+                }
+            }
+        }
+        
+        return pairVec;
+    }
+};
