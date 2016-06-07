@@ -1,0 +1,44 @@
+class Solution {
+public:
+    
+    struct comparePairs{  
+        bool operator()(const std::pair<int,int>& lhs, const std::pair<int,int>& rhs) {
+          return lhs.second > rhs.second;
+        }  
+    };  
+
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        std::unordered_map<int, int> freqMap;
+        
+        for(auto& num: nums){
+            if(freqMap.find(num) == freqMap.end()){
+                freqMap[num] = 1;
+            }else{
+                freqMap[num]++;
+            }
+        }
+        
+        std::priority_queue<std::pair<int, int>, std::vector<std::pair<int,int>>, comparePairs > minHeap;
+        
+        for ( const auto &myPair : freqMap ) {
+            int key = myPair.first;
+            int val = myPair.second;
+            //std::cout << key << ": " << val << endl;
+            if(minHeap.size() == k){
+                if(val > minHeap.top().second){
+                    minHeap.pop();
+                    minHeap.push(myPair);
+                }
+            }else{
+                minHeap.push(myPair);
+            }
+        }
+        
+        std::vector<int> kfreq;
+        while(!minHeap.empty()){
+            kfreq.push_back(minHeap.top().first);
+            minHeap.pop();
+        }
+        return kfreq;
+    }
+};
