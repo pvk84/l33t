@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int maxEnvelopes(vector<pair<int, int>>& envelopes) {
+        int len = envelopes.size();
+        if(len <= 1){
+            return len;
+        }
+        std::sort(envelopes.begin(), envelopes.end());
+        
+        std::vector<int> dp(len, 1);
+        
+        int max = 1;
+        for(int i=1; i< len; i++){
+            for(int j=0; j< i; j++){
+                if(envelopes[i].first > envelopes[j].first && 
+                        envelopes[i].second > envelopes[j].second){
+                    dp[i] = std::max(dp[i], dp[j]+1);
+                }
+            }
+            max = std::max(dp[i], max);
+        }
+        
+        return max;
+    }
+};
