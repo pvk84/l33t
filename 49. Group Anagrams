@@ -1,0 +1,56 @@
+class Solution {
+public:
+    
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        return groupAnagrams_hash(strs);
+    }
+    
+    vector<vector<string>> groupAnagrams_hash(vector<string>& strs) {
+        std::vector<int> primes {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101};
+        
+        std::vector<std::vector<std::string>> anagramGroups;
+        std::unordered_map<long long, std::vector<string>> strMap;
+        for(const auto& str: strs){
+            long long key = 1;
+            for(const auto& ch: str){
+                key *= primes[ch-'a']; // can overflow if strings are too long
+            }
+            
+            if(strMap.find(key) == strMap.end()){
+                std::vector<string> strVec;
+                strVec.push_back(str);
+               strMap[key] =  strVec;
+            }else{
+                strMap[key].push_back(str);
+            }
+        }
+        
+        for(auto& pair: strMap){
+            anagramGroups.push_back(pair.second);
+        }
+        
+        return anagramGroups;   
+    }
+    
+    vector<vector<string>> groupAnagrams_sorthash(vector<string>& strs) {
+        std::vector<std::vector<std::string>> anagramGroups;
+        std::unordered_map<std::string, std::vector<string>> anagramGroup;
+        //std::sort(strs.begin(), strs.end());
+        for(auto str: strs){
+            std::string strKey = str;
+            std::sort(strKey.begin(), strKey.end());
+            if(anagramGroup.find(strKey) == anagramGroup.end()){
+                std::vector<string> vec;
+                vec.push_back(str);
+                anagramGroup[strKey] = vec;
+            }else{
+                anagramGroup[strKey].push_back(str);
+            }
+        }
+        for(auto pair: anagramGroup){
+            std::sort(pair.second.begin(), pair.second.end());
+            anagramGroups.push_back(pair.second);
+        }
+        return anagramGroups;
+    }
+};
